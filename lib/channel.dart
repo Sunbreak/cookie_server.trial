@@ -29,8 +29,19 @@ class CookieServerChannel extends ApplicationChannel {
 
     // Prefer to use `link` instead of `linkFunction`.
     // See: https://aqueduct.io/docs/http/request_controller/
-    router.route("/example").linkFunction((request) async {
-      return Response.ok({"key": "value"});
+    router.route("/getCookie").linkFunction((request) async {
+      return Response.ok('getCookie', headers: {
+        'Set-Cookie': 'date=${DateTime.now()}; Secure; HttpOnly',
+      });
+    });
+
+    router.route("/showCookie").linkFunction((request) async {
+      final httpHeaders = request.raw.headers;
+      final cookie = httpHeaders.value('cookie');
+      if (cookie != null) {
+        return Response.ok(cookie);
+      }
+      return Response.ok('No cookie');
     });
 
     return router;
