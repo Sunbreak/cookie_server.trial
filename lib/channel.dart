@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'cookie_server.dart';
 
 /// This type initializes an application.
@@ -26,12 +28,14 @@ class CookieServerChannel extends ApplicationChannel {
   @override
   Controller get entryPoint {
     final router = Router();
+    final dateFormat = DateFormat(DateFormat.HOUR24_MINUTE_SECOND);
 
     // Prefer to use `link` instead of `linkFunction`.
     // See: https://aqueduct.io/docs/http/request_controller/
     router.route("/getCookie").linkFunction((request) async {
       return Response.ok('getCookie', headers: {
-        'Set-Cookie': 'date=${DateTime.now()}; Secure; HttpOnly',
+        'Set-Cookie':
+            'date=${dateFormat.format(DateTime.now())}; Secure; HttpOnly',
       });
     });
 
